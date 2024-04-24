@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stroke Risk Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://www.shutterstock.com/image-vector/hospital-corridor-realistic-vector-clinic-260nw-2175231121.jpg'); /* Đường dẫn đến ảnh từ URL */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Đặt một lớp mờ trắng cho phần nội dung */
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="number"],
+        select {
+            margin-bottom: 10px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+    <script>
+        function calculateBMI() {
+            var height = parseFloat(document.getElementById('height').value);
+            var weight = parseFloat(document.getElementById('weight').value);
+            
+            if (!isNaN(height) && !isNaN(weight) && height > 0 && weight > 0) {
+                var bmi = weight / Math.pow(height / 100, 2);
+                document.getElementById('bmi').value = bmi.toFixed(2);
+            }
+        }
+        
+        function validateForm() {
+            var age = document.getElementById('age').value;
+            var hypertension = document.getElementById('hypertension').value;
+            var heart_disease = document.getElementById('heart_disease').value;
+            var avg_glucose_level = document.getElementById('avg_glucose_level').value;
+            var errorMessage = '';
+
+            if (age <= 0) {
+                errorMessage += 'Please enter a valid age.\n';
+            }
+            if (hypertension !== '0' && hypertension !== '1') {
+                errorMessage += 'Please select a valid option for hypertension.\n';
+            }
+            if (heart_disease !== '0' && heart_disease !== '1') {
+                errorMessage += 'Please select a valid option for heart disease.\n';
+            }
+            if (avg_glucose_level <= 0) {
+                errorMessage += 'Please enter a valid average glucose level.\n';
+            }
+
+            if (errorMessage !== '') {
+                alert(errorMessage);
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Stroke Risk Prediction</h1>
+        <form action="/predict" method="post" onsubmit="return validateForm()">
+            <label for="gender">Gender:</label>
+            <select name="gender" id="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" min="1" required>
+            <label for="height">Height (cm):</label>
+            <input type="number" name="height" id="height" min="1" onchange="calculateBMI()" required>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" name="weight" id="weight" min="1" onchange="calculateBMI()" required>
+            <label for="bmi">BMI:</label>
+            <input type="number" name="bmi" id="bmi" readonly>
+            <label for="hypertension">Hypertension (1: Yes, 0: No):</label>
+            <select name="hypertension" id="hypertension" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <label for="heart_disease">Heart Disease (1: Yes, 0: No):</label>
+            <select name="heart_disease" id="heart_disease" required>
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+            </select>
+            <label for="ever_married">Ever Married (Yes/No):</label>
+            <select name="ever_married" id="ever_married" required>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+            </select>
+            <label for="work_type">Work Type:</label>
+            <select name="work_type" id="work_type" required>
+                <option value="Private">Private</option>
+                <option value="Self-employed">Self-employed</option>
+                <option value="Govt_job">Govt_job</option>
+            </select>
+            <label for="residence_type">Residence Type (Urban/Rural):</label>
+            <select name="residence_type" id="residence_type" required>
+                <option value="Urban">Urban</option>
+                <option value="Rural">Rural</option>
+            </select>
+            <label for="avg_glucose_level">Average Glucose Level:</label>
+            <input type="number" name="avg_glucose_level" id="avg_glucose_level" min="1" required>
+            <label for="smoking_status">Smoking Status:</label>
+            <select name="smoking_status" id="smoking_status" required>
+                <option value="formerly smoked">Formerly smoked</option>
+                <option value="never smoked">Never smoked</option>
+                <option value="smokes">Smokes</option>
+            </select>
+            <input type="submit" value="Predict">
+        </form>
+    </div>
+</body>
+</html>
